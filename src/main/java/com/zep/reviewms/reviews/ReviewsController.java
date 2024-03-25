@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/company/")
+@RequestMapping("/crud/")
 public class ReviewsController {
     private  final ReviewsService reviewsService;
 
@@ -15,12 +15,12 @@ public class ReviewsController {
 
     }
     @GetMapping("/reviews")
-    public  ResponseEntity<List<Reviews>>getAllReviews(@PathVariable Long companyid){
-        return  new ResponseEntity<>(reviewsService.getAllReviews(companyid), HttpStatus.OK);
+    public  ResponseEntity<List<Reviews>>getAllReviews(@RequestParam Long companyId){
+        return  new ResponseEntity<>(reviewsService.getAllReviews(companyId), HttpStatus.OK);
     }
     @PostMapping("/reviews/")
-    public ResponseEntity<String> addReviews(@PathVariable Long companyid, @RequestBody Reviews reviews) {
-      boolean isReviewSaved= reviewsService.addReviews(companyid,reviews);
+    public ResponseEntity<String> addReviews(@RequestParam Long companyId, @RequestBody Reviews reviews) {
+      boolean isReviewSaved= reviewsService.addReviews(companyId,reviews);
       if(isReviewSaved) {
 
           return new ResponseEntity<>("Review Added Succesfully", HttpStatus.OK);
@@ -29,11 +29,11 @@ public class ReviewsController {
       }
     }
     @GetMapping("/reviews/{reviewsId}")
-    public  ResponseEntity<Reviews>getReview(@PathVariable Long companyId, @PathVariable Long reviewsId){
+    public  ResponseEntity<Reviews>getReview(@PathVariable Long reviewsId){
      return new ResponseEntity<>(reviewsService.getReview(reviewsId), HttpStatus.OK);
     }
     @DeleteMapping("/review/{reviewsId}")
-    public ResponseEntity<Boolean> deleteReview(@PathVariable Long companyId, @PathVariable Long reviewId) {
+    public ResponseEntity<Boolean> deleteReview( @PathVariable Long reviewId) {
         boolean isDeleted = reviewsService.deleteReview(reviewId);
         if (isDeleted) {
             return ResponseEntity.ok(true);
@@ -42,7 +42,7 @@ public class ReviewsController {
         }
     }
     @PutMapping("/reviews/{reviewsId}")
-    public  ResponseEntity<String>updateReview(@PathVariable Long companyId,@PathVariable Long reviewsId, @RequestBody Reviews reviews){
+    public  ResponseEntity<String>updateReview(@PathVariable Long reviewsId, @RequestBody Reviews reviews){
  boolean isReviewUpdated=reviewsService.updateReview(reviewsId,reviews);
  if(isReviewUpdated)
         return  new ResponseEntity<>("Review updated successfully",HttpStatus.OK);
