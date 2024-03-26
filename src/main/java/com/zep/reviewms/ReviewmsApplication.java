@@ -8,6 +8,7 @@ public class ReviewmsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ReviewmsApplication.class, args);
+		System.out.println("Reviews Software Engineer");
 	}
 
 }
