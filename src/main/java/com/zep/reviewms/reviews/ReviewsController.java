@@ -32,7 +32,7 @@ public class ReviewsController {
     public  ResponseEntity<Reviews>getReview(@PathVariable Long reviewsId){
      return new ResponseEntity<>(reviewsService.getReview(reviewsId), HttpStatus.OK);
     }
-    @DeleteMapping("/review/{reviewsId}")
+    @DeleteMapping("/reviews/{reviewsId}")
     public ResponseEntity<Boolean> deleteReview( @PathVariable Long reviewId) {
         boolean isDeleted = reviewsService.deleteReview(reviewId);
         if (isDeleted) {
