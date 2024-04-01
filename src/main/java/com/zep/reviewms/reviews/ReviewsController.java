@@ -1,4 +1,5 @@
 package com.zep.reviewms.reviews;
+import com.zep.reviewms.reviews.messaging.ReviewMessageProducer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,9 +10,10 @@ import java.util.List;
 @RequestMapping("/crud/")
 public class ReviewsController {
     private  final ReviewsService reviewsService;
-
-    public ReviewsController(ReviewsService reviewsService) {
+ private ReviewMessageProducer reviewMessageProducer;
+    public ReviewsController(ReviewsService reviewsService,ReviewMessageProducer reviewMessageProducer) {
         this.reviewsService = reviewsService;
+        this.reviewMessageProducer=reviewMessageProducer;
 
     }
     @GetMapping("/reviews")
@@ -22,7 +24,7 @@ public class ReviewsController {
     public ResponseEntity<String> addReviews(@RequestParam Long companyId, @RequestBody Reviews reviews) {
       boolean isReviewSaved= reviewsService.addReviews(companyId,reviews);
       if(isReviewSaved) {
-
+           reviewMessageProducer.sendMessage(reviews);
           return new ResponseEntity<>("Review Added Succesfully", HttpStatus.OK);
       } else{
               return new  ResponseEntity<>("Review not saved",HttpStatus.NOT_FOUND);
@@ -48,5 +50,12 @@ public class ReviewsController {
         return  new ResponseEntity<>("Review updated successfully",HttpStatus.OK);
 else
      return  new ResponseEntity<>("Review not updated",HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/averageRating")
+    public  Double getAverageReview(@RequestParam Long companyId){
+        reviewsService.getAllReviews(companyId);
+        List<Reviews>reviewsList=reviewsService.getAllReviews(companyId);
+        return reviewsList.stream().mapToDouble(Reviews::getRating).average().orElse(0.0);
     }
 }

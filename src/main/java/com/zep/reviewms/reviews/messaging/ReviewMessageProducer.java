@@ -3,7 +3,9 @@ package com.zep.reviewms.reviews.messaging;
 import com.zep.reviewms.reviews.Reviews;
 import com.zep.reviewms.reviews.dtos.ReviewMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ReviewMessageProducer {
     private  final RabbitTemplate rabbitTemplate;
 
@@ -12,7 +14,7 @@ public class ReviewMessageProducer {
     }
     public  void  sendMessage(Reviews reviews){
         ReviewMessage reviewMessage=new ReviewMessage();
-        reviewMessage.setId(reviewMessage.getId());
+        reviewMessage.setId(reviews.getId());
         reviewMessage.setTitle(reviewMessage.getTitle());
         reviewMessage.setDescription(reviewMessage.getDescription());
         reviewMessage.setRating(reviewMessage.getRating());
